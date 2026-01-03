@@ -3,9 +3,12 @@ PrivacySetu – DPDP Compliance Dashboard UI Enterprise-grade, responsive fronte
 
 Dashboard
 ![image alt](https://github.com/poddarvaibhav2002/DPDP-Compliance-Dashboard-UI/blob/5916db53a5719e5356e1a0e6fd35b157579531d4/dashboard.jpg)
+
 Consent Manager
 ![image alt](https://github.com/poddarvaibhav2002/DPDP-Compliance-Dashboard-UI/blob/5916db53a5719e5356e1a0e6fd35b157579531d4/consent%20manager.png)
+
 Data Requests
 ![image alt](https://github.com/poddarvaibhav2002/DPDP-Compliance-Dashboard-UI/blob/5916db53a5719e5356e1a0e6fd35b157579531d4/Data%20requests.jpg)
+
 Settings
 ![image alt](https://github.com/poddarvaibhav2002/DPDP-Compliance-Dashboard-UI/blob/5916db53a5719e5356e1a0e6fd35b157579531d4/settings.jpg)
