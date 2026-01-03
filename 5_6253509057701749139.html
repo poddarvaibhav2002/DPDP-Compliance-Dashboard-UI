@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrivacySetu - DPDP Compliance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                PrivacySetu
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li class="nav-link active" onclick="showPage('dashboard')">Dashboard</li>
+                <li class="nav-link" onclick="showPage('consent')">Consent Manager</li>
+                <li class="nav-link" onclick="showPage('requests')">Data Requests</li>
+                <li class="nav-link" onclick="showPage('settings')">Settings</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <div class="page-header">
+                <h1 class="page-title">DPDP Compliance Dashboard</h1>
+                <p class="page-subtitle">Monitor your Digital Personal Data Protection compliance status</p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="card">
+                    <div class="card-header">Consent Rate</div>
+                    <div class="card-value" style="color: var(--success-color);">87.3%</div>
+                    <div class="card-footer">↑ 5.2% from last month</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Pending Requests</div>
+                    <div class="card-value" style="color: var(--warning-color);">12</div>
+                    <div class="card-footer">3 require immediate action</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Compliance Alerts</div>
+                    <div class="card-value" style="color: var(--danger-color);">4</div>
+                    <div class="card-footer">2 critical, 2 warnings</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Compliance Score</div>
+                    <div class="card-value" style="color: var(--success-color);">92/100</div>
+                    <div class="card-footer">Excellent compliance</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="chart-grid">
+                <div class="card">
+                    <h3 class="section-title">Data Principal Requests</h3>
+                    <div class="chart-container">
+                        <canvas id="requestsChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="section-title">Consent Status</h3>
+                    <div class="chart-container">
+                        <canvas id="consentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Panel -->
+            <div class="alerts-panel">
+                <h3 class="section-title">Compliance Alerts</h3>
+                <div class="alert-item alert-danger">
+                    <svg class="alert-icon" fill="currentColor" style="color: var(--danger-color);" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                        <div style="font-weight: 600;">SLA Breach on Erasure Request</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Request #DR-2024-0847 has exceeded the 30-day processing timeline mandated under DPDP Act</div>
+                    </div>
+                </div>
+                <div class="alert-item alert-danger">
+                    <svg class="alert-icon" fill="currentColor" style="color: var(--danger-color);" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                        <div style="font-weight: 600;">Consent Expired for Marketing Category</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">156 user consents for marketing purposes have expired and require renewal</div>
+                    </div>
+                </div>
+                <div class="alert-item alert-warning">
+                    <svg class="alert-icon" fill="currentColor" style="color: var(--warning-color);" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                        <div style="font-weight: 600;">Pending Identity Verification</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">5 data access requests are awaiting identity verification as per Data Fiduciary obligations</div>
+                    </div>
+                </div>
+                <div class="alert-item alert-warning">
+                    <svg class="alert-icon" fill="currentColor" style="color: var(--warning-color);" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                        <div style="font-weight: 600;">Third-Party Data Sharing Audit Due</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Quarterly audit of third-party data processors is due within 7 days</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consent Manager Page -->
+        <div id="consent" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Consent Manager</h1>
+                <p class="page-subtitle">Configure and manage user consent as per DPDP Act requirements</p>
+            </div>
+
+            <!-- Consent Preview -->
+            <div class="consent-preview">
+                <div class="consent-header">🔒 Your Privacy Matters to Us</div>
+                <div class="consent-text" id="consentPreviewText">
+                    We respect your privacy and are committed to protecting your personal data in accordance with the Digital Personal Data Protection Act, 2023. As a Data Fiduciary, we collect and process your personal information only with your informed consent. You have the right to access, correct, erase, and nominate representatives for your data. We use your data for the purposes you consent to, and you may withdraw consent at any time. Your data will be processed securely and shared with third parties only with your explicit permission.
+                </div>
+                <div class="consent-buttons">
+                    <button class="btn btn-primary">✓ Accept All</button>
+                    <button class="btn btn-secondary">Manage Preferences</button>
+                    <button class="btn btn-secondary">✗ Reject All</button>
+                </div>
+            </div>
+
+            <!-- Consent Configuration -->
+            <div class="card">
+                <h3 class="section-title">Consent Configuration</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Consent Notice Text</label>
+                    <textarea id="consentText" rows="6">We respect your privacy and are committed to protecting your personal data in accordance with the Digital Personal Data Protection Act, 2023. As a Data Fiduciary, we collect and process your personal information only with your informed consent. You have the right to access, correct, erase, and nominate representatives for your data. We use your data for the purposes you consent to, and you may withdraw consent at any time. Your data will be processed securely and shared with third parties only with your explicit permission.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Consent Categories</label>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Analytics & Performance</div>
+                            <div class="toggle-description">Collect data to improve user experience and platform performance</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Marketing Communications</div>
+                            <div class="toggle-description">Send promotional emails, SMS, and personalized offers</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Functional & Essential</div>
+                            <div class="toggle-description">Required for core platform functionality (cannot be disabled)</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked disabled>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Third-Party Data Sharing</div>
+                            <div class="toggle-description">Share data with trusted partners for enhanced services</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="updateConsentPreview()">💾 Save Configuration</button>
+                    <button class="btn btn-success" onclick="publishConsent()">🚀 Publish Live</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Principal Requests Page -->
+        <div id="requests" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Data Principal Requests</h1>
+                <p class="page-subtitle">Manage access, erasure, and correction requests under DPDP Act</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <select id="typeFilter" onchange="filterRequests()">
+                    <option value="all">All Request Types</option>
+                    <option value="access">Access Request</option>
+                    <option value="erasure">Erasure Request</option>
+                    <option value="correction">Correction Request</option>
+                </select>
+                <select id="statusFilter" onchange="filterRequests()">
+                    <option value="all">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+            </div>
+
+            <!-- Requests Table -->
+            <div class="table-container">
+                <table id="requestsTable">
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Type</th>
+                            <th>User Identifier</th>
+                            <th>Date Submitted</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-type="erasure" data-status="pending">
+                            <td><strong>DR-2024-0847</strong></td>
+                            <td><span class="badge badge-danger">Erasure</span></td>
+                            <td>ra***@example.com</td>
+                            <td>2024-11-28</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                            <td><span class="action-link" onclick="viewRequestDetails('DR-2024-0847', 'Erasure', 'ra***@example.com', '2024-11-28', 'Pending')">View Details</span></td>
+                        </tr>
+                        <tr data-type="access" data-status="processing">
+                            <td><strong>DR-2024-0912</strong></td>
+                            <td><span class="badge badge-info">Access</span></td>
+                            <td>pr***@example.com</td>
+                            <td>2024-12-15</td>
+                            <td><span class="badge badge-info">Processing</span></td>
+                            <td><span class="action-link" onclick="viewRequestDetails('DR-2024-0912', 'Access', 'pr***@example.com', '2024-12-15', 'Processing')">View Details</span></td>
+                        </tr>
+                        <tr data-type="correction" data-status="resolved">
+                            <td><strong>DR-2024-0923</strong></td>
+                            <td><span class="badge badge-warning">Correction</span></td>
+                            <td>an***@example.com</td>
+                            <td>2024-12-18</td>
+                            <td><span class="badge badge-success">Resolved</span></td>
+                            <td><span class="action-link" onclick="viewRequestDetails('DR-2024-0923', 'Correction', 'an***@example.com', '2024-12-18', 'Resolved')">View Details</span></td>
+                        </tr>
+                        <tr data-type="access" data-status="pending">
+                            <td><strong>DR-2024-0934</strong></td>
+                            <td><span class="badge badge-info">Access</span></td>
+                            <td>vi***@example.com</td>
+                            <td>2024-12-20</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                            <td><span class="action-link" onclick="viewRequestDetails('DR-2024-0934', 'Access', 'vi***@example.com', '2024-12-20', 'Pending')">View Details</span></td>
+                        </tr>
+                        <tr data-type="erasure" data-status="processing">
+                            <td><strong>DR-2024-0945</strong></td>
+                            <td><span class="badge badge-danger">Erasure</span></td>
+                            <td>sa***@example.com</td>
+                            <td>2024-12-22</td>
+                            <td><span class="badge badge-info">Processing</span></td>
+                            <td><span class="action-link" onclick="viewRequestDetails('DR-2024-0945', 'Erasure', 'sa***@example.com', '2024-12-22', 'Processing')">View Details</span></td>
+                        </tr>
+                        <tr data-type="access" data-status="resolved">
+                            <td><strong>DR-2024-0956</strong></td>
+                            <td><span class="badge badge-info">Access</span></td>
+                            <td>ka***@example.com</td>
+                            <td>2024-12-25</td>
+                            <td><span class="badge badge-success">Resolved</span></td>
+                            <td><span class="action-link" onclick="viewRequestDetails('DR-2024-0956', 'Access', 'ka***@example.com', '2024-12-25', 'Resolved')">View Details</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Settings & Help</h1>
+                <p class="page-subtitle">Configure preferences and learn about DPDP compliance</p>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="settings-section">
+                <h3 class="section-title">Preferences</h3>
+                
+                <div class="settings-item">
+                    <div>
+                        <div style="font-weight: 600;">Theme</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Switch between light and dark mode</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="settings-item">
+                    <div>
+                        <div style="font-weight: 600;">Language Preference</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Choose your preferred language</div>
+                    </div>
+                    <select>
+                        <option>English</option>
+                        <option>हिंदी (Hindi)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DPDP Help Section -->
+            <h3 class="section-title">DPDP Act - Key Concepts</h3>
+            <div class="help-grid">
+                <div class="help-card">
+                    <div class="help-title">📋 Data Principal</div>
+                    <div class="help-description">
+                        An individual whose personal data is being processed. Under DPDP Act, Data Principals have rights to access, correct, erase, and nominate representatives for their personal data.
+                    </div>
+                </div>
+
+                <div class="help-card">
+                    <div class="help-title">🏢 Data Fiduciary</div>
+                    <div class="help-description">
+                        An entity that determines the purpose and means of processing personal data. Data Fiduciaries must obtain consent, ensure data security, and comply with all obligations under the DPDP Act.
+                    </div>
+                </div>
+
+                <div class="help-card">
+                    <div class="help-title">✅ Consent</div>
+                    <div class="help-description">
+                        Free, specific, informed, unconditional, and unambiguous agreement by the Data Principal for processing their personal data. Consent must be obtained for each specified purpose and can be withdrawn at any time.
+                    </div>
+                </div>
+
+                <div class="help-card">
+                    <div class="help-title">🗑️ Erasure Request</div>
+                    <div class="help-description">
+                        The right of a Data Principal to request deletion of their personal data. Data Fiduciaries must comply within the statutory timeline unless retention is required by law or for legitimate purposes.
+                    </div>
+                </div>
+
+                <div class="help-card">
+                    <div class="help-title">🔍 Access Request</div>
+                    <div class="help-description">
+                        The right to obtain confirmation of whether personal data is being processed, access to such data, and details about processing activities including purpose, categories, and recipients.
+                    </div>
+                </div>
+
+                <div class="help-card">
+                    <div class="help-title">✏️ Correction Request</div>
+                    <div class="help-description">
+                        The right to request correction of inaccurate or incomplete personal data. Data Fiduciaries must verify and update the information within the prescribed timeframe.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Details Modal -->
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Request Details</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Request ID</div>
+                        <div style="font-weight: 600;" id="modalRequestId"></div>
+                    </div>
+                    <div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Request Type</div>
+                        <div id="modalRequestType"></div>
+                    </div>
+                    <div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">User Identifier</div>
+                        <div style="font-weight: 600;" id="modalUserId"></div>
+                    </div>
+                    <div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Date Submitted</div>
+                        <div id="modalDate"></div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Processing Timeline</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-title">Request Submitted</div>
+                        <div class="timeline-date" id="timelineSubmitted"></div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">Identity Verified</div>
+                        <div class="timeline-date" id="timelineVerified"></div>
+                    </div>
+                    <div class="timeline-item" id="timelineProcessingItem">
+                        <div class="timeline-title">Processing</div>
+                        <div class="timeline-date" id="timelineProcessing"></div>
+                    </div>
+                    <div class="timeline-item pending" id="timelineCompletedItem">
+                        <div class="timeline-title">Completed</div>
+                        <div class="timeline-date">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-success">✓ Approve Request</button>
+                <button class="btn btn-danger">✗ Reject Request</button>
+                <button class="btn btn-secondary">📧 Request More Information</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = document.getElementById('themeToggle').checked;
+            
+            if (isDark) {
+                html.setAttribute('data-theme', 'dark');
+            } else {
+                html.removeAttribute('data-theme');
+            }
+        }
+
+        // Consent Manager
+        function updateConsentPreview() {
+            const text = document.getElementById('consentText').value;
+            document.getElementById('consentPreviewText').textContent = text;
+            alert('✓ Consent configuration saved successfully!');
+        }
+
+        function publishConsent() {
+            alert('✓ Consent banner published live! All users will see the updated consent notice.');
+        }
+
+        // Request Filters
+        function filterRequests() {
+            const typeFilter = document.getElementById('typeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('#requestsTable tbody tr');
+            
+            rows.forEach(row => {
+                const type = row.getAttribute('data-type');
+                const status = row.getAttribute('data-status');
+                
+                const typeMatch = typeFilter === 'all' || type === typeFilter;
+                const statusMatch = statusFilter === 'all' || status === statusFilter;
+                
+                if (typeMatch && statusMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Request Details Modal
+        function viewRequestDetails(id, type, user, date, status) {
+            document.getElementById('modalRequestId').textContent = id;
+            document.getElementById('modalRequestType').innerHTML = `<span class="badge badge-info">${type}</span>`;
+            document.getElementById('modalUserId').textContent = user;
+            document.getElementById('modalDate').textContent = date;
+            
+            // Timeline dates
+            const submitDate = new Date(date);
+            document.getElementById('timelineSubmitted').textContent = submitDate.toLocaleDateString('en-IN');
+            
+            const verifyDate = new Date(submitDate);
+            verifyDate.setDate(verifyDate.getDate() + 1);
+            document.getElementById('timelineVerified').textContent = verifyDate.toLocaleDateString('en-IN');
+            
+            const processDate = new Date(submitDate);
+            processDate.setDate(processDate.getDate() + 3);
+            document.getElementById('timelineProcessing').textContent = processDate.toLocaleDateString('en-IN');
+            
+            // Update timeline based on status
+            if (status === 'Pending') {
+                document.getElementById('timelineProcessingItem').classList.add('pending');
+            } else if (status === 'Processing') {
+                document.getElementById('timelineProcessingItem').classList.remove('pending');
+                document.getElementById('timelineCompletedItem').classList.add('pending');
+            } else {
+                document.getElementById('timelineProcessingItem').classList.remove('pending');
+                document.getElementById('timelineCompletedItem').classList.remove('pending');
+            }
+            
+            document.getElementById('requestModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('requestModal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('requestModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize Charts
+        window.onload = function() {
+            // Requests Bar Chart
+            const requestsCtx = document.getElementById('requestsChart').getContext('2d');
+            new Chart(requestsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Access', 'Erasure', 'Correction'],
+                    datasets: [{
+                        label: 'Number of Requests',
+                        data: [45, 28, 17],
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(245, 158, 11, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(37, 99, 235)',
+                            'rgb(239, 68, 68)',
+                            'rgb(245, 158, 11)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 10
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Consent Donut Chart
+            const consentCtx = document.getElementById('consentChart').getContext('2d');
+            new Chart(consentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Accepted', 'Rejected', 'Withdrawn'],
+                    datasets: [{
+                        data: [2847, 412, 156],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(245, 158, 11, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(16, 185, 129)',
+                            'rgb(239, 68, 68)',
+                            'rgb(245, 158, 11)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
